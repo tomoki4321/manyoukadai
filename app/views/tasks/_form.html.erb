@@ -11,13 +11,13 @@
   <% end %>
   <p>投稿内容を記入してください</p>
   <div class="task_name">
-    <%= form.label :task_name %>
+    <%= form.label "タスク名" %>
     <%= form.text_field :task_name %>
   </div>
   <div class="task_content">
-    <%= form.label :task_content %>
+    <%= form.label "内容" %>
     <%= form.text_field :task_content %>
   </div>
-  <%= form.submit %>
+  <%= form.submit "タスク作成" %>
 <% end %>
 <%= link_to "タスク一覧画面にもどる", tasks_path %>
