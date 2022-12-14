@@ -8,7 +8,7 @@
   </tr>
 
 <% @tasks.each do |task| %>
-  <tr>
+  <tr class="task_all">
     <td><%= task.task_name %></td>
     <td><%= task.task_content %></td>
     <td><%= l task.created_at, format: :long %></td>
