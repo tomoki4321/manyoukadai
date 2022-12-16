@@ -10,26 +10,35 @@
     </div>
   <% end %>
   <p>投稿内容を記入してください</p>
-  <div class="task_name">
+  <div class="form-group">
     <%= form.label :task_name,"タスク名" %>
     <%= form.text_field :task_name %>
   </div>
-  <div class="task_content">
+  <div class="form-group">
     <%= form.label :task_content,"内容" %>
     <%= form.text_field :task_content %>
   </div>
-  <div class="task_limit">
+  <div class="form-group">
     <%= form.label :limit,"期日" %>
     <%= form.date_field :limit %>
   </div>
-  <div class="task_status">
+  <div class="form-group">
     <%= form.label :status,"ステータス" %>
     <%= form.select :status,["未着手","着手中","完了"] %>
   </div>
-  <div class="task_priority">
+  <div class="form-group">
     <%= form.label :priority,"優先度" %>
     <%= form.select :priority,Task.priorities.keys.to_a %>
   </div>
   <%= form.submit "タスク作成" %>
 <% end %>
-<%= link_to "タスク一覧画面にもどる", tasks_path %>
+<div class="task_index">
+  <%= link_to "タスク一覧画面にもどる", tasks_path,class: "btn btn-primary" %>
+</div>
+<style>
+.task_index{
+  padding-top:10px;
+}
+</style>
+
+
