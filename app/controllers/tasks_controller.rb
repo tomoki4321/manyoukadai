@@ -44,28 +44,32 @@ class TasksController < ApplicationController
       if params[:task][:task_name].present? && params[:task][:status].present?
         @tasks=Task.where(status: params[:task][:status]).name_search(params[:task][:task_name])
         limit_order_select_and
+        priority_order_and
         render :index
         return
       elsif params[:task][:task_name].present?
         @tasks=Task.name_search(params[:task][:task_name])
         limit_order_select_and
+        priority_order_and
         render :index
         return
       elsif params[:task][:status].present?
         @tasks=Task.where(status: params[:task][:status])
         limit_order_select_and
+        priority_order_and
         render :index
         return
       end
     end
       limit_order_select_only
+      priority_order_only
       render :index
   end
 
   private
 
   def task_params
-    params.require(:task).permit(:task_name,:task_content,:limit,:status)
+    params.require(:task).permit(:task_name,:task_content,:limit,:status,:priority)
   end
 
   def limit_order_select_and
@@ -83,4 +87,21 @@ class TasksController < ApplicationController
       @tasks = Task.limit_order_desc
     end
   end
+
+  def priority_order_and
+    if params[:task][:priority] == "優先▼"
+      @tasks = @tasks.priority_order_desc
+    elsif params[:task][:priority] == "優先▲"
+      @tasks = @tasks.priority_order_asc
+    end
+  end
+
+  def priority_order_only
+    if params[:task][:priority] == "優先▼"
+      @tasks = Task.priority_order_desc
+    elsif params[:task][:priority] == "優先▲"
+      @tasks = Task.priority_order_asc
+    end
+  end
+
 end

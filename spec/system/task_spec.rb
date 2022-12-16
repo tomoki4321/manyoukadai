@@ -30,6 +30,15 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(task_list.first).to have_content 'タスクネーム１'
       end
     end
+    context 'タスクが優先順位の降順に並んでいる場合' do
+      it '優先順位が高いタスクが一番上に表示される' do
+        visit tasks_path
+        find("#task_priority").find("option[value='優先▼']").select_option
+        click_button "検索"
+        task_list = all('.task_all')
+        expect(task_list.first).to have_content 'タスクネーム１'
+      end
+    end
   end
   describe '新規作成機能' do
     context 'タスクを新規作成した場合' do

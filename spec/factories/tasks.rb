@@ -4,6 +4,7 @@ FactoryBot.define do
     task_content { 'タスク内容１' }
     limit {'2022/12/14'}
     status {'完了'}
+    priority {'高'}
   end
 
   factory :second_task, class: Task do
@@ -11,6 +12,7 @@ FactoryBot.define do
     task_content { 'タスク内容２' }
     limit {'2022/12/15'}
     status {'未着手'}
+    priority {'中'}
   end
 
   factory :third_task, class: Task do
@@ -18,6 +20,7 @@ FactoryBot.define do
     task_content { 'タスク内容３' }
     limit {'2022/12/16'}
     status {'着手中'}
+    priority {'低'}
   end
 
   factory :forth_task, class: Task do
@@ -25,5 +28,6 @@ FactoryBot.define do
     task_content { 'タスク内容４' }
     limit {'2022/12/17'}
     status {'完了'}
+    priority {'中'}
   end
 end
