@@ -1,17 +1,6 @@
 class TasksController < ApplicationController
   def index
     @tasks=Task.all.recent_order
-    if params[:task].present?
-      if params[:task][:task_name].present? && params[:task][:status].present?
-        @tasks=Task.where(status: params[:task][:status]).name_search(params[:task][:task_name])
-      elsif params[:task][:task_name].present?
-        @tasks=Task.name_search(params[:task][:task_name])
-      elsif params[:task][:status].present?
-        @tasks=Task.where(status: params[:task][:status])
-      end
-      limit_order_select_and
-    end
-    limit_order_select_only
   end
   def show
     @task=Task.find(params[:id])
@@ -49,7 +38,32 @@ class TasksController < ApplicationController
     redirect_to tasks_path, notice:"タスクを削除しました！"
   end
 
+  def search
+    @tasks=Task.all.recent_order
+    if params[:task].present?
+      if params[:task][:task_name].present? && params[:task][:status].present?
+        @tasks=Task.where(status: params[:task][:status]).name_search(params[:task][:task_name])
+        limit_order_select_and
+        render :index
+        return
+      elsif params[:task][:task_name].present?
+        @tasks=Task.name_search(params[:task][:task_name])
+        limit_order_select_and
+        render :index
+        return
+      elsif params[:task][:status].present?
+        @tasks=Task.where(status: params[:task][:status])
+        limit_order_select_and
+        render :index
+        return
+      end
+    end
+      limit_order_select_only
+      render :index
+  end
+
   private
+
   def task_params
     params.require(:task).permit(:task_name,:task_content,:limit,:status)
   end
@@ -61,6 +75,7 @@ class TasksController < ApplicationController
       @tasks = @tasks.limit_order_desc
     end
   end
+
   def limit_order_select_only
     if params[:task][:limit_select]=="昇順"
       @tasks = Task.limit_order_asc

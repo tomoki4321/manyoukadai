@@ -24,7 +24,8 @@ RSpec.describe 'タスク管理機能', type: :system do
         @task1 = task
         @task2 = task2
         visit tasks_path
-        click_link "終了期限でソートする"
+        find("#task_limit_select").find("option[value='昇順']").select_option
+        click_button "検索"
         task_list = all('.task_all')
         expect(task_list.first).to have_content 'タスクネーム２'
       end
@@ -38,6 +39,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'task[task_name]', with: 'テスト１'
         fill_in 'task[task_content]', with: 'テスト２'
         fill_in "task[limit]", with: date
+        find("#task_status").find("option[value='完了']").select_option
         click_button "タスク作成"
         expect(page).to have_content 'テスト１'
       end

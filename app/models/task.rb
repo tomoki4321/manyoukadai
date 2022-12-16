@@ -6,8 +6,8 @@ class Task < ApplicationRecord
   scope :limit_order_desc, -> {order(limit: :desc)}
   scope :limit_order_asc, -> {order(limit: :asc)}
 
-  def self.name_search(name_search)
-    where("task_name LIKE ?", "%#{name_search}%")
+  def self.name_search(search)
+    where("task_name LIKE ?", "%#{search}%")
   end
-  
+
 end
