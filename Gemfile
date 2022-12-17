@@ -16,6 +16,7 @@ gem 'net-smtp'
 gem 'net-imap'
 gem 'net-pop'
 gem 'kaminari'
+gem 'bcrypt'
 
 
 group :development, :test do
