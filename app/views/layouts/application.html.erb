@@ -12,21 +12,30 @@
       background-color: #c0c0c0;
       height:80px;
     }
+    .login{
+      font-size:30px;
+      padding:20px;
+      color:#fff;
+    }
     </style>
   </head>
 
   <body>
     <header>
+      <% if logged_in? %>
+        <%= link_to "Profile", user_path(current_user.id),class: "login" %>
+        <%= link_to "Logout", session_path(current_user.id), method: :delete,class: "login" %>
+        <%=link_to "タスク作成",new_task_path,class: "login"%>
+        <%= link_to "タスク一覧", tasks_path,class: "login" %>
+        <%=link_to "プロフィール",user_path(current_user.id),class:"login"%>
+        <%=link_to "管理者画面",admin_users_path,class:"login" if admin?%>
+      <% else %>
+        <%= link_to "Sign up", new_user_path,class: "login" %>
+        <%= link_to "Login", new_session_path,class: "login" %>
+      <% end %>
     </header>
     <% flash.each do |key, value| %>
       <%= content_tag(:div, value, class: "#{key}") %>
-    <% end %>
-    <% if logged_in? %>
-      <p><%= link_to "Profile", user_path(current_user.id) %></p>
-      <p><%= link_to "Logout", session_path(current_user.id), method: :delete %></p>
-    <% else %>
-      <p><%= link_to "Sign up", new_user_path %></p>
-      <p><%= link_to "Login", new_session_path %></p>
     <% end %>
     <%= yield %>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

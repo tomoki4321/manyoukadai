@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   skip_before_action :login_required, only: [:new, :create]
   def new
+    redirect_to user_path(current_user.id) if logged_in?
     @user = User.new
   end
 
@@ -16,6 +17,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    redirect_to tasks_path unless @user.id == current_user.id
   end
 
   private

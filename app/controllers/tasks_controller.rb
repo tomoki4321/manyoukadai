@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   def index
-    @tasks=Task.all.recent_order.page(params[:page])
+    @tasks=current_user.tasks.recent_order.page(params[:page])
   end
   def show
     @task=Task.find(params[:id])
@@ -12,6 +12,7 @@ class TasksController < ApplicationController
 
   def create
     @task=Task.new(task_params)
+    @task.user_id = current_user.id
     if @task.save
       redirect_to tasks_path, notice: "タスクを作成しました！"
     else
@@ -39,22 +40,22 @@ class TasksController < ApplicationController
   end
 
   def search
-    @tasks=Task.all.recent_order.page(params[:page])
+    @tasks=current_user.tasks.recent_order.page(params[:page])
     if params[:task].present?
       if params[:task][:task_name].present? && params[:task][:status].present?
-        @tasks=Task.where(status: params[:task][:status]).name_search(params[:task][:task_name]).page(params[:page])
+        @tasks=current_user.tasks.where(status: params[:task][:status]).name_search(params[:task][:task_name]).page(params[:page])
         limit_order_select_and
         priority_order_and
         render :index
         return
       elsif params[:task][:task_name].present?
-        @tasks=Task.name_search(params[:task][:task_name]).page(params[:page])
+        @tasks=current_user.tasks.name_search(params[:task][:task_name]).page(params[:page])
         limit_order_select_and
         priority_order_and
         render :index
         return
       elsif params[:task][:status].present?
-        @tasks=Task.where(status: params[:task][:status]).page(params[:page])
+        @tasks=current_user.tasks.where(status: params[:task][:status]).page(params[:page])
         limit_order_select_and
         priority_order_and
         render :index
@@ -69,7 +70,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:task_name,:task_content,:limit,:status,:priority)
+    params.require(:task).permit(:task_name,:task_content,:limit,:status,:priority,:user_id)
   end
 
   def limit_order_select_and
@@ -82,9 +83,9 @@ class TasksController < ApplicationController
 
   def limit_order_select_only
     if params[:task][:limit_select]=="昇順"
-      @tasks = Task.limit_order_asc.page(params[:page])
+      @tasks = current_user.tasks.limit_order_asc.page(params[:page])
     elsif params[:task][:limit_select]=="降順"
-      @tasks = Task.limit_order_desc.page(params[:page])
+      @tasks = current_user.tasks.limit_order_desc.page(params[:page])
     end
   end
 
@@ -98,9 +99,9 @@ class TasksController < ApplicationController
 
   def priority_order_only
     if params[:task][:priority] == "優先▼"
-      @tasks = Task.priority_order_desc.page(params[:page])
+      @tasks = current_user.tasks.priority_order_desc.page(params[:page])
     elsif params[:task][:priority] == "優先▲"
-      @tasks = Task.priority_order_asc.page(params[:page])
+      @tasks = current_user.tasks.priority_order_asc.page(params[:page])
     end
   end
 
