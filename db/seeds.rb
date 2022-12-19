@@ -37,8 +37,8 @@ users = users.map{|user|user.id}
 100.times{|n|
   Task.create!(
     task_name: 'タスク名だよ'+n.to_s,
-    task_detail: 'タスク内容'+n.to_s,
-    expiry_date: rand(start_day..last_day),
+    task_content: 'タスク内容'+n.to_s,
+    limit: rand(start_day..last_day),
     status: rand(1..3),
     priority: rand(1..3),
     user_id: users.sample
