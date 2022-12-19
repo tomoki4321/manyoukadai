@@ -21,6 +21,10 @@
     <%= form.select :priority,["優先▼","優先▲"],include_blank: true %>
   </div>
   <div class="form-group">
+    <%=form.label :label_name, "タグ"%>
+    <%= form.select :label_id, Label.all.collect{|p|[p.label_name, p.id]},include_blank: true, class: 'form-control mb-3' %>
+  </div>
+  <div class="form-group">
     <%= form.submit "検索",class: "search-btn" %>
     <%=link_to "タスク作成",new_task_path,class: "btn btn-primary"%>
   </div>
@@ -34,6 +38,7 @@
     <th>終了期限</th>
     <th>ステータス</th>
     <th>優先度</th>
+    <th>タグ</th>
     <th>詳細</th>
     <th>編集</th>
     <th>削除</th>
@@ -48,6 +53,11 @@
     <td><%= l task.limit, format: :long %></td>
     <td><%= task.status %></td>
     <td><%= task.priority %></td>
+    <td>
+      <% task.labels.pluck(:label_name).each do |label| %>
+        <label class="btn btn-secondary"><%= label %></label>
+      <% end %>
+    </td>
     <td><%= link_to '詳細を確認する', task_path(task.id),class:"btn btn-outline-success" %></td>
     <td><%= link_to "タスクを編集する", edit_task_path(task.id), class:"btn btn-outline-danger"%></td>
     <td><%= link_to "タスクを削除する", task_path(task.id), method: :delete,data: { confirm: '本当に削除していいですか？' } ,class:"btn btn-outline-warning" %></td>
