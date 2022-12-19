@@ -30,6 +30,10 @@
     <%= form.label :priority,"優先度" %>
     <%= form.select :priority,Task.priorities.keys.to_a %>
   </div>
+  <div class="form-group">
+    <%= form.label :label_name,"タグ" %>
+    <%= form.collection_check_boxes( :label_ids, Label.all, :id, :label_name)%>
+  </div>
   <%= form.submit "タスク作成" %>
 <% end %>
 <div class="task_index">
@@ -38,6 +42,9 @@
 <style>
 .task_index{
   padding-top:10px;
+}
+p{
+  padding-right:10px;
 }
 </style>
 

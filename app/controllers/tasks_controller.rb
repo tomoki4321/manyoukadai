@@ -42,14 +42,29 @@ class TasksController < ApplicationController
   def search
     @tasks=current_user.tasks.recent_order.page(params[:page])
     if params[:task].present?
-      if params[:task][:task_name].present? && params[:task][:status].present?
-        @tasks=current_user.tasks.where(status: params[:task][:status]).name_search(params[:task][:task_name]).page(params[:page])
+      if params[:task][:task_name].present? && params[:task][:status].present? && params[:task][:label_id].present?
+        @task_id=Labelling.where(label_id: params[:task][:label_id]).pluck(:task_id)
+        @tasks=current_user.tasks.where(status: params[:task][:status]).name_search(params[:task][:task_name]).where(id: @task_id).page(params[:page])
         limit_order_select_and
         priority_order_and
         render :index
         return
-      elsif params[:task][:task_name].present?
-        @tasks=current_user.tasks.name_search(params[:task][:task_name]).page(params[:page])
+      elsif params[:task][:task_name].present? && params[:task][:label_id].present?
+        @task_id=Labelling.where(label_id: params[:task][:label_id]).pluck(:task_id)
+        @tasks=current_user.tasks.name_search(params[:task][:task_name]).where(id: @task_id).page(params[:page])
+        limit_order_select_and
+        priority_order_and
+        render :index
+        return
+      elsif params[:task][:status].present? && params[:task][:label_id].present?
+        @task_id=Labelling.where(label_id: params[:task][:label_id]).pluck(:task_id)
+        @tasks=current_user.tasks.where(status: params[:task][:status]).where(id: @task_id).page(params[:page])
+        limit_order_select_and
+        priority_order_and
+        render :index
+        return
+      elsif params[:task][:status].present? && params[:task][:task_name].present?
+        @tasks=current_user.tasks.where(status: params[:task][:status]).name_search(params[:task][:task_name]).page(params[:page])
         limit_order_select_and
         priority_order_and
         render :index
@@ -60,17 +75,31 @@ class TasksController < ApplicationController
         priority_order_and
         render :index
         return
+      elsif params[:task][:task_name].present?
+        @tasks=current_user.tasks.name_search(params[:task][:task_name]).page(params[:page])
+        limit_order_select_and
+        priority_order_and
+        render :index
+        return
+      elsif params[:task][:label_id].present?
+        @task_id=Labelling.where(label_id: params[:task][:label_id]).pluck(:task_id)
+        @tasks=current_user.tasks.where(id: @task_id).page(params[:page])
+        limit_order_select_and
+        priority_order_and
+        render :index
+        return
       end
     end
       limit_order_select_only
       priority_order_only
       render :index
   end
+  
 
   private
 
   def task_params
-    params.require(:task).permit(:task_name,:task_content,:limit,:status,:priority,:user_id)
+    params.require(:task).permit(:task_name,:task_content,:limit,:status,:priority,:user_id,label_ids: [])
   end
 
   def limit_order_select_and

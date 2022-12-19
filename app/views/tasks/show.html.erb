@@ -1,4 +1,12 @@
 <h1>タスク詳細画面</h1>
 <p>タスク名: <%= @task.task_name %></p>
 <p>内容: <%= @task.task_content %></p>
+<p>終了期限：<%= @task.limit %></p>
+<p>ステータス：<%= @task.status %></p>
+<p>優先順位：<%= @task.priority %></p>
+<p>
+  タグ：<% @task.labels.pluck(:label_name).each do |label| %>
+          <label class="btn btn-secondary"><%= label %></label>
+        <% end %>
+</p>
 <%=link_to "タスク一覧に戻る",tasks_path%>
